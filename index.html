@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Waterstanden Rijn</title>
+<style>
+:root {
+  --groen: #c6efce; --groen-txt: #276221;
+  --rood: #ffc7ce; --rood-txt: #9c0006;
+  --geel: #ffeb9c; --geel-txt: #9c6500;
+  --grijs-bg: #f2f2f2; --grijs-txt: #666;
+  --hdr: #2f5496; --hdr-txt: #fff;
+  --hdr2: #4472c4; --hdr2-txt: #fff;
+  --border: #bfbfbf;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Calibri, Arial, sans-serif; font-size: 13px; background: #fff; color: #000; }
+h1 { background: var(--hdr); color: var(--hdr-txt); padding: 8px 16px; font-size: 15px; font-weight: bold; display: flex; align-items: center; gap: 16px; }
+#status { font-size: 11px; font-weight: normal; opacity: .85; }
+#refreshbtn { margin-left: auto; background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.5); color: #fff; padding: 3px 10px; cursor: pointer; border-radius: 3px; font-size: 11px; }
+.section { padding: 8px 12px; }
+.section-title { background: var(--hdr2); color: var(--hdr2-txt); font-weight: bold; padding: 4px 8px; font-size: 12px; margin-bottom: 4px; }
+table { border-collapse: collapse; width: 100%; margin-bottom: 16px; }
+th, td { border: 1px solid var(--border); padding: 3px 8px; text-align: center; white-space: nowrap; }
+th { background: var(--hdr); color: var(--hdr-txt); font-weight: bold; font-size: 11px; }
+th.sub { background: var(--hdr2); }
+td.naam { text-align: left; font-weight: bold; padding-left: 10px; background: var(--grijs-bg); }
+td.num { text-align: right; font-variant-numeric: tabular-nums; }
+td.groen { background: var(--groen); color: var(--groen-txt); font-weight: bold; }
+td.rood { background: var(--rood); color: var(--rood-txt); font-weight: bold; }
+td.geel { background: var(--geel); color: var(--geel-txt); font-weight: bold; }
+td.grijs { color: var(--grijs-txt); }
+input.vuis { width: 58px; border: 1px solid #4472c4; padding: 2px 4px; text-align: center; font-size: 13px; border-radius: 2px; background: #dce6f0; }
+.legende { font-size: 11px; color: #555; margin-bottom: 8px; display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+.leg-item { display: flex; align-items: center; gap: 4px; }
+.leg-dot { width: 14px; height: 14px; border: 1px solid var(--border); border-radius: 2px; }
+.detail-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+.detail-card { }
+.detail-card .section-title { font-size: 11px; }
+.detail-card table th { font-size: 10px; }
+.detail-card table td { font-size: 11px; padding: 2px 5px; }
+.disclaimer { font-size: 10px; color: #888; margin-top: 8px; padding: 4px 12px; }
+@media (max-width: 600px) {
+  table { font-size: 11px; }
+  th, td { padding: 2px 4px; }
+  input.vuis { width: 48px; }
+}
+</style>
+</head>
+<body>
+<h1>
+  &#9741; Waterstanden Rijn
+  <span id="status">Laden...</span>
+  <button id="refreshbtn" onclick="loadData()">&#8635; Vernieuwen</button>
+</h1>
+
+<div class="section">
+  <div class="legende">
+    <strong>Legenda:</strong>
+    <span class="leg-item"><span class="leg-dot" style="background:var(--groen)"></span> Peil &ge; Diepgang (veilig)</span>
+    <span class="leg-item"><span class="leg-dot" style="background:var(--rood)"></span> Peil &lt; Diepgang (te laag)</span>
+    <span class="leg-item"><span class="leg-dot" style="background:var(--geel)"></span> Peil bijna gelijk aan diepgang (&plusmn;20cm)</span>
+    <span class="leg-item"><span class="leg-dot" style="background:var(--grijs-bg)"></span> Geen data</span>
+  </div>
+  <div class="section-title">Dashboard &mdash; Waterstanden &amp; Jouw Diepgang</div>
+  <div style="font-size:11px;color:#555;margin-bottom:4px;">
+    Vul jouw vereiste diepgang (cm) in per station. Wordt opgeslagen in je browser.
+  </div>
+  <table id="main-table">
+    <thead>
+      <tr>
+        <th rowspan="2" style="min-width:120px">Station</th>
+        <th colspan="3">Huidig peil (cm)</th>
+        <th rowspan="2" style="min-width:70px">Jouw<br>Diepgang</th>
+        <th colspan="3">Resultaat: peil &minus; diepgang (cm)</th>
+      </tr>
+      <tr>
+        <th class="sub">05:00</th>
+        <th class="sub">13:00</th>
+        <th class="sub">21:00</th>
+        <th class="sub">05:00</th>
+        <th class="sub">13:00</th>
+        <th class="sub">21:00</th>
+      </tr>
+    </thead>
+    <tbody id="main-tbody"></tbody>
+  </table>
+</div>
+
+<div class="section">
+  <div class="section-title">Voorspelling per station (uurlijks)</div>
+  <div class="detail-grid" id="forecast-grid"></div>
+</div>
+
+<div class="disclaimer">
+  Data: <a href="https://www.elwis.de" target="_blank">elwis.de</a> (KAUB, Oestrich, K&ouml;ln, Duisburg),
+  <a href="https://wasserkarte.net" target="_blank">wasserkarte.net</a> (Nijmegen),
+  <a href="https://www.hochwasser.rlp.de" target="_blank">hochwasser.rlp.de</a> (Maxau).<br>
+  Met zorg samengesteld, maar kan fouten bevatten. Gebruik op eigen risico. Geen rechten aan te ontlenen.
+</div>
+
+<script>
+const DATA_URL = 'data.json';
+
+const DEFAULT_DIEPGANG = {
+  Basel: 245, Maxau: 180, Oestrich: 110, Kaub: 100, Koblenz: 130,
+  Keulen: 80, Dusseldorf: 130, Duisburg: 20, Wesel: 80, Nijmegen: 260
+};
+
+function getDiepgang() {
+  try {
+    return JSON.parse(localStorage.getItem('diepgang') || '{}');
+  } catch (e) { return {}; }
+}
+
+function saveDiepgang(station, val) {
+  const d = getDiepgang();
+  d[station] = val;
+  localStorage.setItem('diepgang', JSON.stringify(d));
+}
+
+function v(val) {
+  return (val == null || val === '') ? '--' : val;
+}
+
+function colorClass(peil, diepgang) {
+  if (peil == null || diepgang == null || diepgang === '') return '';
+  const diff = peil - Number(diepgang);
+  if (diff < 0) return 'rood';
+  if (diff < 20) return 'geel';
+  return 'groen';
+}
+
+function resultText(peil, diepgang) {
+  if (peil == null || diepgang == null || diepgang === '') return '--';
+  const diff = peil - Number(diepgang);
+  return (diff >= 0 ? '+' : '') + diff;
+}
+
+function renderMain(dashboard) {
+  const stored = getDiepgang();
+  const tbody = document.getElementById('main-tbody');
+  tbody.innerHTML = '';
+  dashboard.forEach(function(row) {
+    const station = row.gebied;
+    const diepgang = stored[station] != null ? stored[station] : DEFAULT_DIEPGANG[station] || '';
+    const p05 = row.pegel_05;
+    const p13 = row.pegel_13;
+    const p21 = row.pegel_21;
+
+    const tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td class="naam">' + station + '</td>' +
+      '<td class="num">' + v(p05) + '</td>' +
+      '<td class="num">' + v(p13) + '</td>' +
+      '<td class="num">' + v(p21) + '</td>' +
+      '<td><input class="vuis" type="number" min="0" max="999" value="' + diepgang + '" data-station="' + station + '"></td>' +
+      '<td class="num ' + colorClass(p05, diepgang) + '">' + resultText(p05, diepgang) + '</td>' +
+      '<td class="num ' + colorClass(p13, diepgang) + '">' + resultText(p13, diepgang) + '</td>' +
+      '<td class="num ' + colorClass(p21, diepgang) + '">' + resultText(p21, diepgang) + '</td>';
+    tbody.appendChild(tr);
+  });
+
+  tbody.querySelectorAll('input.vuis').forEach(function(inp) {
+    inp.addEventListener('change', function() {
+      const station = this.dataset.station;
+      const val = parseInt(this.value) || 0;
+      saveDiepgang(station, val);
+      renderMain(dashboard);
+    });
+  });
+}
+
+function renderForecasts(forecasts) {
+  const grid = document.getElementById('forecast-grid');
+  grid.innerHTML = '';
+  Object.keys(forecasts).forEach(function(name) {
+    const fc = forecasts[name];
+    if (!fc || !fc.hourly || !fc.hourly.length) return;
+
+    const dates = fc.dates || [];
+    const hourly = fc.hourly;
+
+    const card = document.createElement('div');
+    card.className = 'detail-card';
+
+    let thead = '<tr><th>Uur</th>';
+    dates.forEach(function(d) {
+      thead += '<th>' + d.slice(0,5) + '</th>';
+    });
+    thead += '</tr>';
+
+    let tbody = '';
+    hourly.forEach(function(row) {
+      let tr = '<tr><td class="num">' + row.uur + '</td>';
+      dates.forEach(function(d) {
+        const val = row[d];
+        tr += '<td class="num">' + (val == null ? '--' : val) + '</td>';
+      });
+      tr += '</tr>';
+      tbody += tr;
+    });
+
+    card.innerHTML =
+      '<div class="section-title">' + name + '</div>' +
+      '<table><thead>' + thead + '</thead><tbody>' + tbody + '</tbody></table>';
+    grid.appendChild(card);
+  });
+}
+
+function loadData() {
+  document.getElementById('status').textContent = 'Laden...';
+  fetch(DATA_URL + '?t=' + Date.now())
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      const dt = new Date(data.updated);
+      document.getElementById('status').textContent =
+        'Bijgewerkt: ' + dt.toLocaleString('nl-NL', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}) + ' UTC';
+      renderMain(data.dashboard);
+      renderForecasts(data.forecasts || {});
+    })
+    .catch(function(e) {
+      document.getElementById('status').textContent = 'Fout: ' + e.message;
+    });
+}
+
+// Auto-refresh every 10 minutes
+loadData();
+setInterval(loadData, 10 * 60 * 1000);
+</script>
+</body>
+</html>

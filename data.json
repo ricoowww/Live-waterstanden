@@ -1,58 +1,58 @@
 {
-  "updated": "2026-08-11T11:22:18.647694Z",
+  "updated": "2026-08-11T12:11:29.569362Z",
   "dashboard": [
     {
       "gebied": "Basel",
       "pegel_05": 66,
-      "pegel_13": null,
+      "pegel_13": 66,
       "pegel_21": null
     },
     {
       "gebied": "Maxau",
       "pegel_05": 112,
-      "pegel_13": null,
+      "pegel_13": 113,
       "pegel_21": null
     },
     {
       "gebied": "Oestrich",
       "pegel_05": 37,
-      "pegel_13": null,
+      "pegel_13": 35,
       "pegel_21": null
     },
     {
       "gebied": "Kaub",
       "pegel_05": 15,
-      "pegel_13": null,
+      "pegel_13": 14,
       "pegel_21": null
     },
     {
       "gebied": "Koblenz",
       "pegel_05": 71,
-      "pegel_13": null,
+      "pegel_13": 70,
       "pegel_21": null
     },
     {
       "gebied": "Keulen",
       "pegel_05": 57,
-      "pegel_13": null,
+      "pegel_13": 55,
       "pegel_21": null
     },
     {
       "gebied": "Dusseldorf",
       "pegel_05": 12,
-      "pegel_13": null,
+      "pegel_13": 11,
       "pegel_21": null
     },
     {
       "gebied": "Duisburg",
       "pegel_05": 141,
-      "pegel_13": null,
+      "pegel_13": 140,
       "pegel_21": null
     },
     {
       "gebied": "Wesel",
       "pegel_05": null,
-      "pegel_13": null,
+      "pegel_13": -10,
       "pegel_21": null
     },
     {
@@ -60,7 +60,7 @@
       "pegel_05": null,
       "pegel_13": null,
       "pegel_21": null,
-      "pegel_nu": 412
+      "pegel_nu": 413
     }
   ],
   "forecasts": {
@@ -124,7 +124,7 @@
           "uur": "13:00",
           "10.08.2026": 41,
           "11.08.2026": null,
-          "12.08.2026": null,
+          "12.08.2026": 40,
           "13.08.2026": null,
           "14.08.2026": null,
           "15.08.2026": 38
@@ -236,7 +236,7 @@
           "uur": "13:00",
           "10.08.2026": 16,
           "11.08.2026": null,
-          "12.08.2026": null,
+          "12.08.2026": 14,
           "13.08.2026": null,
           "14.08.2026": null,
           "15.08.2026": 14
@@ -348,7 +348,7 @@
           "uur": "13:00",
           "10.08.2026": 61,
           "11.08.2026": null,
-          "12.08.2026": null,
+          "12.08.2026": 55,
           "13.08.2026": null,
           "14.08.2026": null,
           "15.08.2026": 51
@@ -460,7 +460,7 @@
           "uur": "13:00",
           "10.08.2026": 144,
           "11.08.2026": null,
-          "12.08.2026": null,
+          "12.08.2026": 140,
           "13.08.2026": null,
           "14.08.2026": null,
           "15.08.2026": 137
@@ -514,22 +514,10 @@
     }
   },
   "nijmegen": {
-    "current": 412,
+    "current": 413,
     "forecast_raw": {}
   },
   "maxau_hourly": [
-    {
-      "t": "10-08 23:30",
-      "v": 304
-    },
-    {
-      "t": "10-08 23:45",
-      "v": 304
-    },
-    {
-      "t": "11-08 00:00",
-      "v": 305
-    },
     {
       "t": "11-08 00:15",
       "v": 304
@@ -709,6 +697,18 @@
     {
       "t": "11-08 11:15",
       "v": 306
+    },
+    {
+      "t": "11-08 11:30",
+      "v": 307
+    },
+    {
+      "t": "11-08 11:45",
+      "v": 306
+    },
+    {
+      "t": "11-08 12:00",
+      "v": 308
     }
   ]
 }

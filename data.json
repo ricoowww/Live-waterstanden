@@ -1,10 +1,10 @@
 {
-  "updated": "2026-08-16T11:24:57.417621Z",
+  "updated": "2026-08-16T11:47:47.243126Z",
   "dashboard": [
     {
       "gebied": "Basel",
       "pegel_05": 55,
-      "pegel_13": null,
+      "pegel_13": 59,
       "pegel_21": null
     },
     {
@@ -60,7 +60,7 @@
       "pegel_05": null,
       "pegel_13": null,
       "pegel_21": null,
-      "pegel_nu": 398
+      "pegel_nu": 399
     }
   ],
   "forecasts": {
@@ -514,14 +514,10 @@
     }
   },
   "nijmegen": {
-    "current": 398,
+    "current": 399,
     "forecast_raw": {}
   },
   "maxau_hourly": [
-    {
-      "t": "15-08 23:30",
-      "v": 307
-    },
     {
       "t": "15-08 23:45",
       "v": 308
@@ -709,6 +705,10 @@
     {
       "t": "16-08 11:15",
       "v": 302
+    },
+    {
+      "t": "16-08 11:30",
+      "v": 301
     }
   ]
 }

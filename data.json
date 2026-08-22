@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-22T19:26:27.947643Z",
+  "updated": "2026-08-22T19:48:13.663291Z",
   "dashboard": [
     {
       "gebied": "Basel",
@@ -29,38 +29,38 @@
       "gebied": "Koblenz",
       "pegel_05": 104,
       "pegel_13": 103,
-      "pegel_21": null
+      "pegel_21": 100
     },
     {
       "gebied": "Keulen",
       "pegel_05": 92,
       "pegel_13": 99,
-      "pegel_21": null
+      "pegel_21": 94
     },
     {
       "gebied": "Dusseldorf",
       "pegel_05": 31,
       "pegel_13": 42,
-      "pegel_21": null
+      "pegel_21": 52
     },
     {
       "gebied": "Duisburg",
       "pegel_05": 156,
       "pegel_13": 163,
-      "pegel_21": null
+      "pegel_21": 175
     },
     {
       "gebied": "Wesel",
       "pegel_05": 608,
       "pegel_13": 0,
-      "pegel_21": null
+      "pegel_21": 611
     },
     {
       "gebied": "Nijmegen",
       "pegel_05": null,
       "pegel_13": null,
       "pegel_21": null,
-      "pegel_nu": 425
+      "pegel_nu": 423
     }
   ],
   "forecasts": {
@@ -384,7 +384,7 @@
           "uur": "21:00",
           "21.08.2026": 82,
           "22.08.2026": null,
-          "23.08.2026": null,
+          "23.08.2026": 94,
           "24.08.2026": null,
           "25.08.2026": null,
           "26.08.2026": 102
@@ -496,7 +496,7 @@
           "uur": "21:00",
           "21.08.2026": 155,
           "22.08.2026": null,
-          "23.08.2026": null,
+          "23.08.2026": 175,
           "24.08.2026": null,
           "25.08.2026": null,
           "26.08.2026": 185
@@ -514,14 +514,10 @@
     }
   },
   "nijmegen": {
-    "current": 425,
+    "current": 423,
     "forecast_raw": {}
   },
   "maxau_hourly": [
-    {
-      "t": "22-08 07:30",
-      "v": 387
-    },
     {
       "t": "22-08 07:45",
       "v": 389
@@ -708,6 +704,10 @@
     },
     {
       "t": "22-08 19:15",
+      "v": 417
+    },
+    {
+      "t": "22-08 19:30",
       "v": 417
     }
   ]
